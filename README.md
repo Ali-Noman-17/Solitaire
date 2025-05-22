@@ -79,5 +79,5 @@ An object that contains an array of specific number of a cell subtypes. Two such
 <br><br>
 
 ## UML Diagram
-
+[UML image](./solitaire_uml_ss.png)
 ## Flow State Diagram
