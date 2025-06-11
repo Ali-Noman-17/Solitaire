@@ -7,7 +7,7 @@ class BlackCard : public Card {
 public:
 	BlackCard();
 	BlackCard(int val, char name, const char* path);
-	virtual ~BlackCard() = 0;
+	virtual ~BlackCard();
 	virtual char getSuit() = 0;
 	char getColour();
 };

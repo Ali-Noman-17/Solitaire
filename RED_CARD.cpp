@@ -2,6 +2,8 @@
 
 RedCard::RedCard(): Card() {}
 
+RedCard::~RedCard() {}
+
 RedCard::RedCard(int val, char name, const char* path): Card(val,name,path) {}
 
 char RedCard::getColour() { return RED_CARD_COLOUR; }

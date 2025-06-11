@@ -6,7 +6,9 @@
 #include <raylib.h>
 using namespace std;
 
-#define BACK_TEXTURE "./backtext.png"
+#define BACK_TEXTURE "./sprites/texture-back.jpg"
+#define FRONT_TEXTURE_PREFIX "./sprites/"
+#define FRONT_TEXTURE_SUFFIX ".jpg"
 #define RED_CARD_COLOUR 'R'
 #define BLACK_CARD_COLOUR 'B'
 #define SUIT_SPADES 'S'
@@ -28,7 +30,7 @@ class Card {
 public:
 	Card();
 	Card(int val, char name, const char* path);
-	virtual ~Card() = 0;
+	virtual ~Card();
 	int getValue();
 	char getName();
 	virtual char getColour() = 0;

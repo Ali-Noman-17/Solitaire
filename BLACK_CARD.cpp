@@ -2,6 +2,8 @@
 
 BlackCard::BlackCard() : Card() {}
 
+BlackCard::~BlackCard() {}
+
 BlackCard::BlackCard(int val, char name, const char* path): Card(val, name, path) {}
 
 char BlackCard::getColour() { return BLACK_CARD_COLOUR; }

@@ -7,6 +7,8 @@ Card::Card(int val, char name, const char* path) :value(val), name(name), flippe
 	xy = { 0,0 };
 }
 
+Card::~Card() {}
+
 int Card::getValue() { return value; }
 
 char Card::getName() { return name; }
