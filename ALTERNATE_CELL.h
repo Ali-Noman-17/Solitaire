@@ -1,0 +1,13 @@
+#ifndef ALTERANTE_CELL
+#define ALTERNATE_CELL
+
+#include "CELL.h"
+
+class AlternateCell : public Cell {
+public:
+	AlternateCell();
+	AlternateCell(const int cap, const char* path);
+	~AlternateCell();
+	bool stackAllowed(Card* obj);
+};
+#endif ALTERNATE_CELL
