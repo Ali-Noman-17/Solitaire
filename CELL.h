@@ -15,6 +15,7 @@ using namespace std;
 #define CELL_ROTATION 0.00
 #define CELL_SCALE 0.25
 #define CELL_TINT WHITE
+#define STACK_WIDTH 10
 #define CAP_INCREMENT 5
 
 class Cell {
@@ -30,14 +31,19 @@ public:
 	int getNum();
 	int getCap();
 	char getLatestColour();
+	bool isEmpty();
 	virtual bool stackAllowed(Card* obj) = 0;
 	void move(const float x, const float y);
 	void empty();
 	void unload();
-	void draw();
+	virtual void draw();
+	void drawEmpty();
+	void drawCascade();
+	void flipTop();
 	void increaseCap();
 	void add(Card* obj);
 	void remove(Card* obj);
+	Card* getCard(const int i);
 };
 
-#endif CELL_H 
+#endif CELL_H

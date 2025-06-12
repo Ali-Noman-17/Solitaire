@@ -8,6 +8,7 @@ public:
 	AlternateCell();
 	AlternateCell(const int cap, const char* path);
 	~AlternateCell();
+	void draw() override;
 	bool stackAllowed(Card* obj);
 };
 #endif ALTERNATE_CELL

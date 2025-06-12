@@ -15,6 +15,8 @@ int Cell::getCap() { return cap; }
 
 char Cell::getLatestColour() { return arr[num - 1]->getColour(); }
 
+bool Cell::isEmpty() { return (num == 0); }
+
 void Cell::move(const float x, const float y) { xy = { x, y }; }
 
 void Cell::empty() { delete[] arr; }
@@ -22,9 +24,24 @@ void Cell::empty() { delete[] arr; }
 void Cell::unload() { UnloadTexture(face); }
 
 void Cell::draw() {
-	if (num == 0) DrawTextureEx(face, xy, CELL_ROTATION, CELL_SCALE, CELL_TINT);
+	if (num == 0) drawEmpty();
 	else arr[num - 1]->draw();
 }
+
+void Cell::drawCascade() {
+	if (num == 0) drawEmpty();
+	else {
+		for (int i = 0; i < num; i++) {
+			int yShift = xy.y + (i * STACK_WIDTH);
+			arr[i]->move(xy.x, yShift);
+			arr[i]->draw();
+		}
+	}
+}
+
+void Cell::drawEmpty() { DrawTextureEx(face, xy, CELL_ROTATION, CELL_SCALE, CELL_TINT); }
+
+void Cell::flipTop() { arr[num - 1]->flip(); }
 
 void Cell::increaseCap() {
 	Card** temp = new Card * [cap + CAP_INCREMENT];
@@ -35,22 +52,13 @@ void Cell::increaseCap() {
 }
 
 void Cell::add(Card* obj) {
-	if (stackAllowed(obj)) {
-		if (num == cap) increaseCap();
-		arr[num] = obj;
-		num++;
-	}
-	else return; //error
+	if (num == cap) increaseCap();
+	arr[num] = obj;
+	num++;
 }
 
-void Cell::remove(Card* obj) {
-	int index = -1;
-	for (int i = 0; i < num; i++) {
-		if (arr[i] == obj) {
-			index = i;
-			break;
-		}
-	}
-	if (index > -1) num--;
-	else return; //error
+void Cell::remove(Card* obj) { num--; }
+
+Card* Cell::getCard(const int i) {
+	if (i <= num) return arr[i];
 }

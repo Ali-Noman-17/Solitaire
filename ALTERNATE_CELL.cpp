@@ -9,6 +9,8 @@ AlternateCell::~AlternateCell() {
 	unload();
 }
 
+void AlternateCell::draw() { drawCascade(); }
+
 bool AlternateCell::stackAllowed(Card* obj) {
 	if (getNum() == 0) return 1;
 	if (obj->getColour() == getLatestColour()) return 0;
