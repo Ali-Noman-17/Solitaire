@@ -12,6 +12,9 @@ using namespace std;
 #define CLUBS_CELL_TECTURE "./sprites/texture-cell-C.jpg"
 #define HEARTS_CELL_TECTURE "./sprites/texture-cell-H.jpg"
 #define DIAMONDS_CELL_TECTURE "./sprites/texture-cell-D.jpg"
+#define CELL_ROTATION 0.00
+#define CELL_SCALE 0.25
+#define CELL_TINT WHITE
 #define CAP_INCREMENT 5
 
 class Cell {
@@ -28,7 +31,10 @@ public:
 	int getCap();
 	char getLatestColour();
 	virtual bool stackAllowed(Card* obj) = 0;
+	void move(const float x, const float y);
 	void empty();
+	void unload();
+	void draw();
 	void increaseCap();
 	void add(Card* obj);
 	void remove(Card* obj);
