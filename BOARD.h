@@ -25,6 +25,7 @@ class Board {
 	~Board();
 	Board(const Board& obj) = delete;
 	Board& operator=(const Board& obj) = delete;
+
 public:
 	static Board& getInstance() {
 		if (instance == nullptr) instance = new Board();
