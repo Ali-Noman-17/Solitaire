@@ -26,9 +26,12 @@ using namespace std;
 #define POOL_SIZE 16
 #define POOL_LOCKED_CELL 0
 #define POOL_AVAILABLE_CELL 1
-#define CELL_WIDTH 75
-#define SPACER_WIDTH 25
-#define VERT_WIDTH 20
+#define DIVISION_WIDTH_PLAY 725
+#define DIVISION_WIDTH_POOL 375
+#define DIVISION_WIDTH_SUITS 425
+#define DIVISION_HEIGHT_PLAY 647.5
+#define DIVISION_HEIGHT_POOL 152.5
+#define DIVISION_HEIGHT_SUITS 152.5
 #define DIVISION_ROTATION 0.00
 #define DIVISION_SCALE 1.00
 #define DIVISION_TINT WHITE
@@ -40,13 +43,16 @@ class Division {
 	Cell** arr;
 	Texture2D face;
 	Vector2 xy;
+	Rectangle hitBox;
 public:
 	Division() : num(0), arr(nullptr), face(), xy{ 0,0 } {}
 
-	Division(const int num, const char* path) : num(num), arr(new Cell* [num]) {
+	Division(const int num, const char* path, const float width, const float height) :
+		num(num), arr(new Cell* [num]) {
 		face = LoadTexture(path);
 		xy = { 0,0 };
 		for (int i = 0; i < num; i++) { arr[i] = new T; }
+		hitBox = { xy.x, xy.y, width, height };
 	}
 
 	~Division() { 
@@ -72,11 +78,18 @@ public:
 			float xShift = xy.x + cellWidth + spacerWidth;
 
 			arr[i]->move(xShift, yShift);
+			arr[i]->updateHitBox();
 			arr[i]->alignCards();
 		}
 	}
 
+	Rectangle getHitBox() { return hitBox; }
+
 	void move(const float x, const float y) { xy = { x,y }; }
+
+	void updateHitBox() { hitBox = { xy.x,xy.y, hitBox.uwidth, hitBox.height }; }
+
+	void updateHitBox(const float width, const float height) { hitBox = { xy.x,xy.y,width,height }; }
 
 	void moveToCell(Card* obj, Cell* baseCell, Cell* targetCell) {
 		int index = -1;

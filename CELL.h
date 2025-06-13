@@ -12,6 +12,10 @@ using namespace std;
 #define CLUBS_CELL_TEXTURE "./sprites/texture-cell-C.jpg"
 #define HEARTS_CELL_TEXTURE "./sprites/texture-cell-H.jpg"
 #define DIAMONDS_CELL_TEXTURE "./sprites/texture-cell-D.jpg"
+#define CELL_WIDTH 75
+#define CELL_HEIGHT 112.5
+#define SPACER_WIDTH 25
+#define VERT_WIDTH 20
 #define CELL_ROTATION 0.00
 #define CELL_SCALE 0.25
 #define CELL_TINT WHITE
@@ -24,6 +28,7 @@ class Cell {
 	Card** arr;
 	Texture2D face;
 	Vector2 xy;
+	Rectangle hitBox;
 public:
 	Cell();
 	Cell(const int cap, const char* path);
@@ -31,9 +36,13 @@ public:
 	int getNum();
 	int getCap();
 	char getLatestColour();
+	Rectangle getHitBox();
+	Rectangle getTopCardHitBox();
 	bool isEmpty();
 	virtual bool stackAllowed(Card* obj) = 0;
 	void move(const float x, const float y);
+	void updateHitBox(const float width, const float height);
+	void updateHitBox();
 	void alignCards();
 	void empty();
 	void unload();

@@ -1,8 +1,9 @@
 #include "BOARD.h"
 
 Board::Board() : randoms(new int[NUMBER_CARDS]), num(NUMBER_CARDS), score(0), 
-play(ALTERNATE_DIVISION_NUM, ALTERNATE_DIVISION_TEXTURE), suits(SUIT_DIVISION_NUM, SUIT_DIVISION_TEXTURE), 
-pool(POOL_DIVISION_NUM, POOL_DIVISION_TEXTURE),
+play(ALTERNATE_DIVISION_NUM, ALTERNATE_DIVISION_TEXTURE, DIVISION_WIDTH_PLAY, DIVISION_HEIGHT_PLAY),
+suits(SUIT_DIVISION_NUM, SUIT_DIVISION_TEXTURE, DIVISION_WIDTH_SUITS, DIVISION_HEIGHT_SUITS), 
+pool(POOL_DIVISION_NUM, POOL_DIVISION_TEXTURE, DIVISION_WIDTH_POOL, DIVISION_HEIGHT_POOL),
 deck(new Card* [NUMBER_CARDS]) {
 }
 
@@ -44,7 +45,9 @@ void Board::initPlay() {
 	}
 }
 
-void Board::initSuits() { suits.defSuitCells(); }
+void Board::initSuits() { 
+	suits.defSuitCells(); 
+}
 
 void Board::initPool() {
 	int size = num;
@@ -68,19 +71,22 @@ void Board::position() {
 }
 
 void Board::positionPlay() {
-	float y = (2 * VERT_WIDTH) * CELL_WIDTH;
+	float y = (2 * VERT_WIDTH) * CELL_HEIGHT;
 	play.move(0, y);
+	play.updateHitBox();
 	play.positionCells();
 }
 
 void Board::positionSuits() {
 	float x = (3 * SPACER_WIDTH) + (3 * CELL_WIDTH);
 	suits.move(x, 0);
+	suits.updateHitBox();
 	suits.positionCells();
 }
 
 void Board::positionPool() {
 	pool.move(0, 0);
+	pool.updateHitBox();
 	pool.positionCells();
 }
 

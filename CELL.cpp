@@ -1,8 +1,9 @@
 #include "CELL.h"
 
-Cell::Cell() : cap(0), num(0), arr(nullptr), face(), xy{ 0,0 } {}
+Cell::Cell() : cap(0), num(0), arr(nullptr), face(), xy{ 0,0 }, hitBox{ xy.x,xy.y,CELL_WIDTH,CELL_HEIGHT } {}
 
-Cell::Cell(const int cap, const char* path) : cap(cap), num(0), arr(new Card* [cap]) {
+Cell::Cell(const int cap, const char* path) : cap(cap), num(0), arr(new Card* [cap]),
+hitBox{ xy.x,xy.y,CELL_WIDTH,CELL_HEIGHT } {
 	face = LoadTexture(path);
 	xy = { 0,0 };
 }
@@ -15,9 +16,17 @@ int Cell::getCap() { return cap; }
 
 char Cell::getLatestColour() { return arr[num - 1]->getColour(); }
 
+Rectangle Cell::getHitBox() { return hitBox; }
+
+Rectangle Cell::getTopCardHitBox() { return arr[num - 1]->getHitBox(); }
+
 bool Cell::isEmpty() { return (num == 0); }
 
 void Cell::move(const float x, const float y) { xy = { x, y }; }
+
+void Cell::updateHitBox() { hitBox = { xy.x,xy.y, hitBox.width, hitBox.height }; }
+
+void Cell::updateHitBox(const float width, const float height) { hitBox = { xy.x,xy.y,width,height }; }
 
 void Cell::alignCards() {
 	for (int i = 0; i < num; i++) {
@@ -40,8 +49,10 @@ void Cell::drawCascade() {
 		for (int i = 0; i < num; i++) {
 			int yShift = xy.y + (i * STACK_WIDTH);
 			arr[i]->move(xy.x, yShift);
+			arr[i]->updateHitBox(CARD_WIDTH, CARD_HEIGHT_STACKED);
 			arr[i]->draw();
 		}
+		arr[num - 1]->updateHitBox(CARD_WIDTH, CARD_HEIGHT);
 	}
 }
 

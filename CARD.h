@@ -15,6 +15,9 @@ using namespace std;
 #define SUIT_CLUBS 'C'
 #define SUIT_HEARTS 'H'
 #define SUIT_DIAMONDS 'D'
+#define CARD_WIDTH 75
+#define CARD_HEIGHT 112.5
+#define CARD_HEIGHT_STACKED 22.5
 #define CARD_ROTATION 0.00
 #define CARD_SCALE 0.25
 #define CARD_TINT WHITE
@@ -26,6 +29,7 @@ class Card {
 	string front;
 	Texture2D face;
 	Vector2 xy;
+	Rectangle hitBox;
 	
 public:
 	Card();
@@ -35,11 +39,14 @@ public:
 	char getName();
 	virtual char getColour() = 0;
 	virtual char getSuit() = 0;
+	Rectangle getHitBox();
 	void flip();
 	bool isFlipped();
 	bool canStack(Card* obj);
 	void draw();
-	void move(const int x, const int y);
+	void move(const float x, const float y);
+	void updateHitBox(const float width, const float height);
+	void updateHitBox();
 	void unload();
 
 };
