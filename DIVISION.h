@@ -4,9 +4,19 @@
 #include <iostream>
 #include <string>
 #include <raylib.h>
+#include "SPADES.h"
+#include "CLUBS.h"
+#include "HEARTS.h"
+#include "DIAMONDS.h"
 #include "CELL.h"
+#include "ALTERNATE_CELL.h"
+#include "SUIT_CELL.h"
+#include "FREE_CELL.h"
 using namespace std;
 
+#define NUMBER_VALS 13
+#define NUMBER_SUITS 4
+#define NUMBER_CARDS 52
 #define ALTERNATE_DIVISION_TEXTURE "./sprites/texture-alt-div.jpg"
 #define SUIT_DIVISION_TEXTURE "./sprites/texture-suit-div.jpg"
 #define POOL_DIVISION_TEXTURE "./sprites/texture-pool-div.jpg"
@@ -34,7 +44,7 @@ public:
 	Division() : num(0), arr(nullptr), face(), xy{ 0,0 } {}
 
 	Division(const int num, const char* path) : num(num), arr(new Cell* [num]) {
-		face = LoadTexture(path));
+		face = LoadTexture(path);
 		xy = { 0,0 };
 		for (int i = 0; i < num; i++) { arr[i] = new T; }
 	}
@@ -43,6 +53,10 @@ public:
 		UnloadTexture(face); 
 		for (int i = 0; i < num; i++) { delete arr[i]; }
 		delete[] arr;
+	}
+
+	T* constructCell() {
+		return new T();
 	}
 
 	void draw() {
@@ -89,6 +103,12 @@ public:
 		for (int i = 0; i < num; i++) { arr[i]->flipTop(); } 
 	}
 
+	int getCellNum(const int cellNum) { return arr[cellNum]->getNum(); }
+
+	void addToCell(Card* obj, const int cellNum) {
+		arr[cellNum]->add(obj);
+	}
+
 	void reveal() {
 		int i = arr[POOL_LOCKED_CELL]->getNum();
 		Card* obj = arr[POOL_LOCKED_CELL]->getCard(i);
@@ -105,7 +125,33 @@ public:
 		}
 	}
 
+	void defSuitCells() {
+		for (int i = 0; i < NUMBER_SUITS; i++) { delete arr[i]; }
+		arr[0] = new SuitCell(NUMBER_VALS, SPADES_CELL_TECTURE, SUIT_SPADES);
+		arr[1] = new SuitCell(NUMBER_VALS, CLUBS_CELL_TECTURE, SUIT_CLUBS);
+		arr[2] = new SuitCell(NUMBER_VALS, HEARTS_CELL_TECTURE, SUIT_HEARTS);
+		arr[3] = new SuitCell(NUMBER_VALS, DIAMONDS_CELL_TECTURE, SUIT_DIAMONDS);
+	}
+
 	bool isCellEmpty(const int i) { return arr[i]->isEmpty(); }
 };
+
+template <>
+inline AlternateCell* Division<AlternateCell>::constructCell() {
+	const int cap = 13;
+	return new AlternateCell(cap, CELL_TEXTURE);
+}
+
+template <>
+inline SuitCell* Division<SuitCell>::constructCell() {
+	const int cap = 13;
+	return new SuitCell(cap, CELL_TEXTURE, SUIT_SPADES);
+}
+
+template <>
+inline FreeCell* Division<FreeCell>::constructCell() {
+	const int cap = 24;
+	return new FreeCell(cap, CELL_TEXTURE);
+}
 
 #endif DIVISION_H
