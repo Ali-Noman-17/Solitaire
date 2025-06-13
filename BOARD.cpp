@@ -44,7 +44,7 @@ void Board::initPlay() {
 	}
 }
 
-void Board::initSuits() {}
+void Board::initSuits() { suits.defSuitCells(); }
 
 void Board::initPool() {
 	int size = num;
@@ -70,15 +70,18 @@ void Board::position() {
 void Board::positionPlay() {
 	float y = (2 * VERT_WIDTH) * CELL_WIDTH;
 	play.move(0, y);
+	play.positionCells();
 }
 
 void Board::positionSuits() {
 	float x = (3 * SPACER_WIDTH) + (3 * CELL_WIDTH);
 	suits.move(x, 0);
+	suits.positionCells();
 }
 
 void Board::positionPool() {
 	pool.move(0, 0);
+	pool.positionCells();
 }
 
 void Board::addScore() { score += SCORE_INCREMENT; }

@@ -7,9 +7,6 @@
 #include "DIVISION.h"
 using namespace std;
 
-#define NUMBER_VALS 13
-#define NUMBER_SUITS 4
-#define NUMBER_CARDS 52
 #define CARD_VALUES "A23456789TJQK"
 #define SCORE_INCREMENT 5
 #define BOARD_LENGTH 1000

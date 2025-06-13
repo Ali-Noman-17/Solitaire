@@ -19,6 +19,12 @@ bool Cell::isEmpty() { return (num == 0); }
 
 void Cell::move(const float x, const float y) { xy = { x, y }; }
 
+void Cell::alignCards() {
+	for (int i = 0; i < num; i++) {
+		arr[i]->move(xy.x, xy.y);
+	}
+}
+
 void Cell::empty() { delete[] arr; }
 
 void Cell::unload() { UnloadTexture(face); }

@@ -72,6 +72,7 @@ public:
 			float xShift = xy.x + cellWidth + spacerWidth;
 
 			arr[i]->move(xShift, yShift);
+			arr[i]->alignCards();
 		}
 	}
 
@@ -114,7 +115,7 @@ public:
 		Card* obj = arr[POOL_LOCKED_CELL]->getCard(i);
 		moveStack(obj, arr[POOL_LOCKED_CELL], arr[POOL_AVAILABLE_CELL], i);
 	}
-
+	
 	void cycleBack() {
 		int size = arr[POOL_AVAILABLE_CELL]->getNum();
 		for (int i = 1; i <= size; i++) {
@@ -127,10 +128,10 @@ public:
 
 	void defSuitCells() {
 		for (int i = 0; i < NUMBER_SUITS; i++) { delete arr[i]; }
-		arr[0] = new SuitCell(NUMBER_VALS, SPADES_CELL_TECTURE, SUIT_SPADES);
-		arr[1] = new SuitCell(NUMBER_VALS, CLUBS_CELL_TECTURE, SUIT_CLUBS);
-		arr[2] = new SuitCell(NUMBER_VALS, HEARTS_CELL_TECTURE, SUIT_HEARTS);
-		arr[3] = new SuitCell(NUMBER_VALS, DIAMONDS_CELL_TECTURE, SUIT_DIAMONDS);
+		arr[0] = new SuitCell(NUMBER_VALS, SPADES_CELL_TEXTURE, SUIT_SPADES);
+		arr[1] = new SuitCell(NUMBER_VALS, CLUBS_CELL_TEXTURE, SUIT_CLUBS);
+		arr[2] = new SuitCell(NUMBER_VALS, HEARTS_CELL_TEXTURE, SUIT_HEARTS);
+		arr[3] = new SuitCell(NUMBER_VALS, DIAMONDS_CELL_TEXTURE, SUIT_DIAMONDS);
 	}
 
 	bool isCellEmpty(const int i) { return arr[i]->isEmpty(); }

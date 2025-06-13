@@ -8,10 +8,10 @@
 using namespace std;
 
 #define CELL_TEXTURE "./sprites/texture-cell.jpg"
-#define SPADES_CELL_TECTURE "./sprites/texture-cell-S.jpg"
-#define CLUBS_CELL_TECTURE "./sprites/texture-cell-C.jpg"
-#define HEARTS_CELL_TECTURE "./sprites/texture-cell-H.jpg"
-#define DIAMONDS_CELL_TECTURE "./sprites/texture-cell-D.jpg"
+#define SPADES_CELL_TEXTURE "./sprites/texture-cell-S.jpg"
+#define CLUBS_CELL_TEXTURE "./sprites/texture-cell-C.jpg"
+#define HEARTS_CELL_TEXTURE "./sprites/texture-cell-H.jpg"
+#define DIAMONDS_CELL_TEXTURE "./sprites/texture-cell-D.jpg"
 #define CELL_ROTATION 0.00
 #define CELL_SCALE 0.25
 #define CELL_TINT WHITE
@@ -34,6 +34,7 @@ public:
 	bool isEmpty();
 	virtual bool stackAllowed(Card* obj) = 0;
 	void move(const float x, const float y);
+	void alignCards();
 	void empty();
 	void unload();
 	virtual void draw();
