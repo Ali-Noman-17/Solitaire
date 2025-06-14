@@ -10,6 +10,11 @@ SuitCell::~SuitCell() {
 }
 
 bool SuitCell::stackAllowed(Card* obj) {
-	if (obj->getSuit() == suit) return 1;
+	if (obj->getSuit() != suit) return 0;
+	if (isEmpty()) {
+		if (obj->getValue() == 1) return 1;
+		else return 0;
+	}
+	else if (getTopCard()->canStackAsc(obj)) return 1;
 	else return 0;
 }

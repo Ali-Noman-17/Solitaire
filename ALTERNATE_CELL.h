@@ -9,6 +9,6 @@ public:
 	AlternateCell(const int cap, const char* path);
 	~AlternateCell();
 	void draw() override;
-	bool stackAllowed(Card* obj);
+	bool stackAllowed(Card* obj) override;
 };
 #endif ALTERNATE_CELL

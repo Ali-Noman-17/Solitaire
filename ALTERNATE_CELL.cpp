@@ -9,10 +9,16 @@ AlternateCell::~AlternateCell() {
 	unload();
 }
 
-void AlternateCell::draw() { drawCascade(); }
+void AlternateCell::draw() { 
+	drawCascade(); 
+	int num = getNum();
+	float height = ((num - 1) * STACK_WIDTH) + CARD_HEIGHT;
+	updateHitBox(CELL_WIDTH, height);
+}
 
 bool AlternateCell::stackAllowed(Card* obj) {
-	if (getNum() == 0) return 1;
+	if (isEmpty()) return 1;
 	if (obj->getColour() == getLatestColour()) return 0;
+	else if (getTopCard()->canStackDsc(obj)) return 1;
 	else return 1;
 }

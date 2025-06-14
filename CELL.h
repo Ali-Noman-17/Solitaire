@@ -19,7 +19,7 @@ using namespace std;
 #define CELL_ROTATION 0.00
 #define CELL_SCALE 0.25
 #define CELL_TINT WHITE
-#define STACK_WIDTH 10
+#define STACK_WIDTH 25
 #define CAP_INCREMENT 5
 
 class Cell {
@@ -37,6 +37,7 @@ public:
 	int getCap();
 	char getLatestColour();
 	Rectangle getHitBox();
+	Rectangle getCardHitBox(const int index);
 	Rectangle getTopCardHitBox();
 	bool isEmpty();
 	virtual bool stackAllowed(Card* obj) = 0;
@@ -53,7 +54,9 @@ public:
 	void increaseCap();
 	void add(Card* obj);
 	void remove(Card* obj);
-	Card* getCard(const int i);
+	bool isTopCard(Card* obj);
+	Card* getCard(const int index);
+	Card* getTopCard();
 };
 
 #endif CELL_H

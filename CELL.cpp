@@ -18,6 +18,8 @@ char Cell::getLatestColour() { return arr[num - 1]->getColour(); }
 
 Rectangle Cell::getHitBox() { return hitBox; }
 
+Rectangle Cell::getCardHitBox(const int index) { return arr[index]->getHitBox(); }
+
 Rectangle Cell::getTopCardHitBox() { return arr[num - 1]->getHitBox(); }
 
 bool Cell::isEmpty() { return (num == 0); }
@@ -71,11 +73,21 @@ void Cell::increaseCap() {
 void Cell::add(Card* obj) {
 	if (num == cap) increaseCap();
 	arr[num] = obj;
+	arr[num]->move(xy.x, xy.y);
 	num++;
 }
 
 void Cell::remove(Card* obj) { num--; }
 
-Card* Cell::getCard(const int i) {
-	if (i <= num) return arr[i];
+bool Cell::isTopCard(Card* obj) {
+	if (arr[num - 1] == obj) return 1;
+	else return 0;
+}
+
+Card* Cell::getCard(const int index) {
+	if (index <= num) return arr[index];
+}
+
+Card* Cell::getTopCard() {
+	return arr[num - 1];
 }

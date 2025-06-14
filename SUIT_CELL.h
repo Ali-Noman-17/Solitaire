@@ -9,6 +9,6 @@ public:
 	SuitCell();
 	SuitCell(const int cap, const char* path, const char suit);
 	~SuitCell();
-	bool stackAllowed(Card* obj);
+	bool stackAllowed(Card* obj) override;
 };
 #endif SUIT_CELL
