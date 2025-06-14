@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <raylib.h>
-#include "DIVISION.h"
+#include "INPUT_RECORDER.h"
 using namespace std;
 
 #define CARD_VALUES "A23456789TJQK"
@@ -21,10 +21,15 @@ class Board {
 	Division<SuitCell> suits;
 	Division<FreeCell> pool;
 	Card** deck;
+	Vector2 mouse;
+	InputRecorder source;
+	InputRecorder target;
+	bool isMousePressed;
 	Board();
 	~Board();
 	Board(const Board& obj) = delete;
 	Board& operator=(const Board& obj) = delete;
+	
 
 public:
 	static Board& getInstance() {
@@ -43,8 +48,18 @@ public:
 	void positionSuits();
 	void positionPool();
 
-	void addScore();
+	void pickCard();
+	void setCard();
+	
+	void recordInput(InputRecorder rec);
+	void recordPlayCollision(InputRecorder rec);
+	void recordSuitsCollision(InputRecorder rec);
+	void recordPoolCollision(InputRecorder rec);
+	void resetInputs();
+	bool inputSetAllowed();
+
 	bool checkWin();
+	void addScore();
 	void randomise();
 	int getRandom();
 	string pathConctructor(const char name, const char suit);

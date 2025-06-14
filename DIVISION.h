@@ -20,6 +20,9 @@ using namespace std;
 #define ALTERNATE_DIVISION_TEXTURE "./sprites/texture-alt-div.jpg"
 #define SUIT_DIVISION_TEXTURE "./sprites/texture-suit-div.jpg"
 #define POOL_DIVISION_TEXTURE "./sprites/texture-pool-div.jpg"
+#define POOL 1
+#define SUITS 2
+#define PLAY 3
 #define ALTERNATE_DIVISION_NUM 7
 #define SUIT_DIVISION_NUM 4
 #define POOL_DIVISION_NUM 2
@@ -83,11 +86,15 @@ public:
 		}
 	}
 
-	Rectangle getHitBox() { return hitBox; }
+	Cell* getCellRef(const int index) { return arr[index]; }
+
+	Rectangle getHitBox() { return hitBox; };
+
+	Rectangle getCellHitBox(const int index) { return arr[index]->getHitBox(); };
 
 	void move(const float x, const float y) { xy = { x,y }; }
 
-	void updateHitBox() { hitBox = { xy.x,xy.y, hitBox.uwidth, hitBox.height }; }
+	void updateHitBox() { hitBox = { xy.x,xy.y, hitBox.width, hitBox.height }; }
 
 	void updateHitBox(const float width, const float height) { hitBox = { xy.x,xy.y,width,height }; }
 
