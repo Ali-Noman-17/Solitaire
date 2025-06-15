@@ -1,16 +1,18 @@
-#include "BOARD.h"
+#include "BOARD.h", logger(LOG_FILE)
 
 Board::Board() : randoms(new int[NUMBER_CARDS]), num(NUMBER_CARDS), score(0), 
 play(ALTERNATE_DIVISION_NUM, ALTERNATE_DIVISION_TEXTURE, DIVISION_WIDTH_PLAY, DIVISION_HEIGHT_PLAY),
 suits(SUIT_DIVISION_NUM, SUIT_DIVISION_TEXTURE, DIVISION_WIDTH_SUITS, DIVISION_HEIGHT_SUITS), 
 pool(POOL_DIVISION_NUM, POOL_DIVISION_TEXTURE, DIVISION_WIDTH_POOL, DIVISION_HEIGHT_POOL),
-deck(new Card* [NUMBER_CARDS]), mouse{0,0}, source(), target(), isMousePressed(0) {}
+deck(new Card* [NUMBER_CARDS]), mouse{0,0}, source(), target(), logger(LOG_FILE), isMousePressed(0) {}
 
 Board::~Board() { 
 	for (int i = 0; i < NUMBER_CARDS; i++) { delete deck[i]; }
 	delete[] deck;
 	delete[] randoms;
 }
+
+void Board::destroy() { delete instance; }
 
 void Board::initDeck() {
 	int preset = 0;

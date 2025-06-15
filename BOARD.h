@@ -5,8 +5,10 @@
 #include <string>
 #include <raylib.h>
 #include "INPUT_RECORDER.h"
+#include "LOGGER.h"
 using namespace std;
 
+#define LOG_FILE "logData.txt"
 #define CARD_VALUES "A23456789TJQK"
 #define SCORE_INCREMENT 5
 #define BOARD_LENGTH 1000
@@ -24,19 +26,20 @@ class Board {
 	Vector2 mouse;
 	InputRecorder source;
 	InputRecorder target;
+	Logger logger;
 	bool isMousePressed;
+	
 	Board();
 	~Board();
 	Board(const Board& obj) = delete;
 	Board& operator=(const Board& obj) = delete;
-	
-
 public:
 	static Board& getInstance() {
 		if (instance == nullptr) instance = new Board();
 		return *instance;
 	}
-	
+	void destroy();
+
 	void initialise();
 	void initDeck();
 	void initPlay();
