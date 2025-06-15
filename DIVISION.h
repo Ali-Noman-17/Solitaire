@@ -72,7 +72,7 @@ public:
 		DrawTextureEx(face, xy, DIVISION_ROTATION, DIVISION_SCALE, DIVISION_TINT);
 		for (int i = 0; i < num; i++) { arr[i]->draw(); }
 	}
-
+	
 	void positionCells() {
 		float yShift = xy.y + VERT_WIDTH;
 		for (int i = 0; i < num; i++) {
@@ -152,6 +152,26 @@ public:
 		arr[1] = new SuitCell(NUMBER_VALS, CLUBS_CELL_TEXTURE, SUIT_CLUBS);
 		arr[2] = new SuitCell(NUMBER_VALS, HEARTS_CELL_TEXTURE, SUIT_HEARTS);
 		arr[3] = new SuitCell(NUMBER_VALS, DIAMONDS_CELL_TEXTURE, SUIT_DIAMONDS);
+	}
+
+	void save(ofstream& file) {
+		file.write((char*)num, sizeof(int));
+		file.write((char*)&xy.x, sizeof(float));
+		file.write((char*)&xy.y, sizeof(float));
+		file.write((char*)&hitBox.width, sizeof(float));
+		file.write((char*)&hitBox.height, sizeof(float));
+		for (int i = 0; i < num; i++) { arr[i]->save(); }
+	}
+
+	void load(ifstream& file, Card** deck) {
+		file.load((char*)num, sizeof(int));
+		file.read((char*)&xy.x, sizeof(float));
+		file.read((char*)&xy.y, sizeof(float));
+		hitBox.x = xy.x;
+		hitBox.y = xy.y;
+		file.read((char*)&hitBox.width, sizeof(float));
+		file.read((char*)&hitBox.height, sizeof(float));
+		for (int i = 0; i < num; i++) { arr[i]->load(); }
 	}
 
 	bool isCellEmpty(const int i) { return arr[i]->isEmpty(); }

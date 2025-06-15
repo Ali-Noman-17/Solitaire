@@ -91,3 +91,63 @@ Card* Cell::getCard(const int index) {
 Card* Cell::getTopCard() {
 	return arr[num - 1];
 }
+
+void Cell::savePrimitives(ofstream& file) {
+	file.write((char*)&cap, sizeof(int));
+	file.write((char*)&num, sizeof(int));
+	file.write((char*)&xy.x, sizeof(float));
+	file.write((char*)&xy.y, sizeof(float));
+	file.write((char*)&hitBox.width, sizeof(float));
+	file.write((char*)&hitBox.height, sizeof(float));
+}
+
+void Cell::loadPrimitives(ifstream& file) {
+	file.read((char*)&cap, sizeof(int));
+	file.read((char*)&num, sizeof(int));
+	file.read((char*)&xy.x, sizeof(float));
+	file.read((char*)&xy.y, sizeof(float));
+	hitBox.x = xy.x;
+	hitBox.y = xy.y;
+	file.read((char*)&hitBox.width, sizeof(float));
+	file.read((char*)&hitBox.height, sizeof(float));
+}
+
+void Cell::saveCards(ofstream& file) {
+	for (int i = 0; i < num; i++) {
+		char name = arr[i]->getName();
+		char suit = arr[i]->getSuit();
+		bool flipped = arr[i]->isFlipped();
+		file.write((char*)&name, sizeof(char));
+		file.write((char*)&suit, sizeof(char));
+		file.write((char*)&flipped, sizeof(bool));
+	}
+}
+
+void Cell::loadCards(ifstream& file, Card** deck) {
+	for (int i = 0; i < num; i++) {
+		char name, suit;
+		bool flipped;
+		file.read((char*)&name, sizeof(char));
+		file.read((char*)&suit, sizeof(char));
+		file.read((char*)&flipped, sizeof(bool));
+
+		arr = new Card * [cap];
+		for (int j = 0; j < 52; j++) {
+			if (deck[j]->getName() == name && deck[j]->getSuit() == suit) {
+				arr[i] = deck[j];
+				arr[i]->setFlip(flipped);
+				arr[i]->move(xy.x, xy.y);
+			} 
+		}
+	}
+}
+
+void Cell::save(ofstream& file) {
+	savePrimitives(file);
+	saveCards(file);
+}
+
+void Cell::load(ifstream& file, Card** deck) {
+	loadPrimitives(file);
+	loadCards(file, deck);
+}

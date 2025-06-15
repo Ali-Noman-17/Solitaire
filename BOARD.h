@@ -58,6 +58,9 @@ public:
 	void resetInputs();
 	bool inputSetAllowed();
 
+	void saveGame(ofstream& file);
+	void loadGame(ifstream& file);
+
 	bool checkWin();
 	void addScore();
 	void randomise();

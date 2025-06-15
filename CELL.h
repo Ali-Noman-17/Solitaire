@@ -57,6 +57,12 @@ public:
 	bool isTopCard(Card* obj);
 	Card* getCard(const int index);
 	Card* getTopCard();
+	void savePrimitives(ofstream& file);
+	void loadPrimitives(ifstream& file);
+	void saveCards(ofstream& file);
+	void loadCards(ifstream& file, Card** deck);
+	virtual void save(ofstream& file);
+	virtual void load(ifstream& file, Card** deck);
 };
 
 #endif CELL_H

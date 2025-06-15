@@ -2,10 +2,12 @@
 #define CARD_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <raylib.h>
 using namespace std;
 
+#define SAVE_FILE "SAVED_DATA.bin"
 #define BACK_TEXTURE "./sprites/texture-back.jpg"
 #define FRONT_TEXTURE_PREFIX "./sprites/"
 #define FRONT_TEXTURE_SUFFIX ".jpg"
@@ -41,13 +43,17 @@ public:
 	virtual char getSuit() = 0;
 	Rectangle getHitBox();
 	void flip();
+	void setFlip(bool flip);
 	bool isFlipped();
-	bool canStack(Card* obj);
+	bool canStackAsc(Card* obj);
+	bool canStackDsc(Card* obj);
 	void draw();
 	void move(const float x, const float y);
 	void updateHitBox(const float width, const float height);
 	void updateHitBox();
 	void unload();
+	void save(ofstream& file);
+	void load(ifstream& file);
 
 };
 

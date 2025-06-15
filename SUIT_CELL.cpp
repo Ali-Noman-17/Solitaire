@@ -18,3 +18,15 @@ bool SuitCell::stackAllowed(Card* obj) {
 	else if (getTopCard()->canStackAsc(obj)) return 1;
 	else return 0;
 }
+
+void SuitCell::save(ofstream& file) {
+	savePrimitives(file);
+	file.write((char*)&suit, sizeof(char));
+	saveCards(file);
+}
+
+void SuitCell::load(ifstream& file, Card** deck) {
+	loadPrimitives(file);
+	file.read((char*)&suit, sizeof(char));
+	loadCards(file, deck);
+}

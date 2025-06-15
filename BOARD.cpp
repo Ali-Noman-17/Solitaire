@@ -199,6 +199,28 @@ bool Board::inputSetAllowed(){
 	else return 1;
 }
 
+void Board::saveGame(ofstream& file) {
+	file.write((char*)&num, sizeof(int));
+	file.write((char*)&score, sizeof(int));
+	file.write((char*)&mouse.x, sizeof(float));
+	file.write((char*)&mouse.y, sizeof(float));
+	file.write((char*)&isMousePressed, sizeof(bool));
+	play.save(file);
+	suits.save(file);
+	pool.save(file);
+}
+
+void Board::loadGame(ifstream& file) {
+	file.read((char*)&num, sizeof(int));
+	file.read((char*)&score, sizeof(int));
+	file.read((char*)&mouse.x, sizeof(float));
+	file.read((char*)&mouse.y, sizeof(float));
+	file.read((char*)&isMousePressed, sizeof(bool));
+	play.load(file, deck);
+	suits.load(file, deck);
+	pool.load(file, deck);
+}
+
 void Board::addScore() { score += SCORE_INCREMENT; }
 
 bool Board::checkWin() { 
