@@ -2,10 +2,12 @@
 
 Cell::Cell() : cap(0), num(0), arr(nullptr), face(), xy{ 0,0 }, hitBox{ xy.x,xy.y,CELL_WIDTH,CELL_HEIGHT } {}
 
-Cell::Cell(const int cap, const char* path) : cap(cap), num(0), arr(new Card* [cap]),
+Cell::Cell(const int cap, const char* path) : cap(cap), num(0), arr(new Card* [cap]), face(), xy{0,0},
 hitBox{ xy.x,xy.y,CELL_WIDTH,CELL_HEIGHT } {
 	face = LoadTexture(path);
 	xy = { 0,0 };
+	face.width = hitBox.width;
+	face.height = hitBox.height;
 }
 
 Cell::~Cell() { delete[] arr; }
@@ -124,6 +126,8 @@ void Cell::saveCards(ofstream& file) {
 }
 
 void Cell::loadCards(ifstream& file, Card** deck) {
+	delete[] arr;
+	arr = new Card * [cap];
 	for (int i = 0; i < num; i++) {
 		char name, suit;
 		bool flipped;
@@ -131,7 +135,6 @@ void Cell::loadCards(ifstream& file, Card** deck) {
 		file.read((char*)&suit, sizeof(char));
 		file.read((char*)&flipped, sizeof(bool));
 
-		arr = new Card * [cap];
 		for (int j = 0; j < 52; j++) {
 			if (deck[j]->getName() == name && deck[j]->getSuit() == suit) {
 				arr[i] = deck[j];

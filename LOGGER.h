@@ -15,7 +15,6 @@ public:
     Logger(string file);
     ~Logger();
     void flush();
-    void destroy();
     void writeError(const string error_message);
 };
 

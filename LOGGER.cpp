@@ -13,10 +13,6 @@ void Logger::flush() {
     file.close();
 }
 
-void Logger::destroy() {
-    delete instance;
-}
-
 void Logger::writeError(const string error_message) {
     file.open(fileName, ios::app);
     if (!file.is_open()) return; //error

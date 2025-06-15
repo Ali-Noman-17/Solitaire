@@ -56,6 +56,8 @@ public:
 		xy = { 0,0 };
 		for (int i = 0; i < num; i++) { arr[i] = new T; }
 		hitBox = { xy.x, xy.y, width, height };
+		face.width = hitBox.width;
+		face.height = hitBox.height;
 	}
 
 	~Division() { 
@@ -102,13 +104,13 @@ public:
 		int index = -1;
 		int size = baseCell->getNum();
 		for (int i = 0; i < size; i++) {
-			if (arr[i] == obj) {
+			if (baseCell->getCard(i) == obj) {
 				index = i;
 				break;
 			}
 		}
-		if (index == -1) return; //error
-		if (!targetCell->stackAllowed(obj)) return; //error
+		if (index == -1) return;
+		if (!targetCell->stackAllowed(obj)) return;
 		else moveStack(obj, baseCell, targetCell, index);
 	}
 
@@ -160,18 +162,18 @@ public:
 		file.write((char*)&xy.y, sizeof(float));
 		file.write((char*)&hitBox.width, sizeof(float));
 		file.write((char*)&hitBox.height, sizeof(float));
-		for (int i = 0; i < num; i++) { arr[i]->save(); }
+		for (int i = 0; i < num; i++) { arr[i]->save(file); }
 	}
 
 	void load(ifstream& file, Card** deck) {
-		file.load((char*)num, sizeof(int));
+		file.read((char*)num, sizeof(int));
 		file.read((char*)&xy.x, sizeof(float));
 		file.read((char*)&xy.y, sizeof(float));
 		hitBox.x = xy.x;
 		hitBox.y = xy.y;
 		file.read((char*)&hitBox.width, sizeof(float));
 		file.read((char*)&hitBox.height, sizeof(float));
-		for (int i = 0; i < num; i++) { arr[i]->load(); }
+		for (int i = 0; i < num; i++) { arr[i]->load(file,deck); }
 	}
 
 	bool isCellEmpty(const int i) { return arr[i]->isEmpty(); }

@@ -1,4 +1,6 @@
-#include "BOARD.h", logger(LOG_FILE)
+#include "BOARD.h"
+
+Board* Board::instance = nullptr;
 
 Board::Board() : randoms(new int[NUMBER_CARDS]), num(NUMBER_CARDS), score(0), 
 play(ALTERNATE_DIVISION_NUM, ALTERNATE_DIVISION_TEXTURE, DIVISION_WIDTH_PLAY, DIVISION_HEIGHT_PLAY),

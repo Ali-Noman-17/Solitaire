@@ -3,10 +3,12 @@
 Card::Card() : value(0), name('\0'), flipped(0), front(), face(), xy{ 0,0 }, 
 hitBox{ xy.x,xy.y,CARD_WIDTH,CARD_HEIGHT } {}
 
-Card::Card(int val, char name, const char* path) :value(val), name(name), flipped(0), front(path),
+Card::Card(int val, char name, const char* path) :value(val), name(name), flipped(0), front(path), face(), xy{ 0,0 },
 hitBox{ xy.x,xy.y,CARD_WIDTH,CARD_HEIGHT } {
 	face = LoadTexture(BACK_TEXTURE);
 	xy = { 0,0 };
+	face.width = hitBox.width;
+	face.height = hitBox.height;
 }
 
 Card::~Card() {}
