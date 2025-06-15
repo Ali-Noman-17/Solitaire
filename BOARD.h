@@ -8,6 +8,8 @@
 #include "LOGGER.h"
 using namespace std;
 
+#define ERROR_FILE "Couldn't open file"
+#define ERROR_INVALID "Invalid move attempted"
 #define LOG_FILE "logData.txt"
 #define CARD_VALUES "A23456789TJQK"
 #define SCORE_INCREMENT 5
@@ -61,8 +63,10 @@ public:
 	void resetInputs();
 	bool inputSetAllowed();
 
-	void saveGame(ofstream& file);
-	void loadGame(ifstream& file);
+	void saveGame();
+	void loadGame();
+	void save(ofstream& file);
+	void load(ifstream& file);
 
 	bool checkWin();
 	void addScore();

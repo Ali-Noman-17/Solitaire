@@ -93,32 +93,32 @@ void Board::positionPool() {
 
 void Board::pickCard() {
 	recordInput(source);
-	if (!source.isDataComplete) return; //invalid
+	if (!source.isDataComplete) throw ERROR_INVALID;
 	//pool moves
 	if (source.divNum == POOL && source.cellNum == POOL_LOCKED_CELL) {
 		if (!source.cell->isEmpty()) pool.reveal();
 		else if (!pool.getCellRef(POOL_AVAILABLE_CELL)->isEmpty()) pool.cycleBack();
-		else return; //error
+		else throw ERROR_INVALID;
 	}
 }
 
 void Board::setCard() {
 	recordInput(target);
-	if (!target.isDataComplete) return; //invalid
-	if (!inputSetAllowed()) return;
-	if (target.divNum == POOL) return; //invalid
+	if (!target.isDataComplete) throw ERROR_INVALID;
+	if (!inputSetAllowed()) throw ERROR_INVALID;
+	if (target.divNum == POOL) throw ERROR_INVALID;
 	//suits move
 	if (target.divNum == SUITS) {
 		if (source.divNum == POOL || source.divNum == PLAY) {
-			if (!source.cell->isTopCard(source.card)) return; //invalid
+			if (!source.cell->isTopCard(source.card)) throw ERROR_INVALID;
 			suits.moveToCell(source.card, source.cell, target.cell);
 		}
-		else if (source.divNum == SUITS) return; //invalid
+		else if (source.divNum == SUITS) throw ERROR_INVALID;
 	}
 	//play move
 	if (target.divNum == PLAY) {
 		if (source.divNum == POOL || source.divNum == SUITS) {
-			if (!source.cell->isTopCard(source.card)) return; //invalid
+			if (!source.cell->isTopCard(source.card)) throw ERROR_INVALID;
 			play.moveToCell(source.card, source.cell, target.cell);
 		}
 		else if (source.divNum == PLAY) play.moveToCell(source.card, source.cell, target.cell);
@@ -201,7 +201,21 @@ bool Board::inputSetAllowed(){
 	else return 1;
 }
 
-void Board::saveGame(ofstream& file) {
+void Board::saveGame() {
+	ofstream file(SAVE_FILE);
+	if (!file.is_open()) throw ERROR_FILE;
+	save(file);
+	file.close();
+}
+
+void Board::loadGame() {
+	ifstream file(SAVE_FILE);
+	if (!file.is_open()) throw ERROR_FILE;
+	load(file);
+	file.close();
+}
+
+void Board::save(ofstream& file) {
 	file.write((char*)&num, sizeof(int));
 	file.write((char*)&score, sizeof(int));
 	file.write((char*)&mouse.x, sizeof(float));
@@ -212,7 +226,7 @@ void Board::saveGame(ofstream& file) {
 	pool.save(file);
 }
 
-void Board::loadGame(ifstream& file) {
+void Board::load(ifstream& file) {
 	file.read((char*)&num, sizeof(int));
 	file.read((char*)&score, sizeof(int));
 	file.read((char*)&mouse.x, sizeof(float));
