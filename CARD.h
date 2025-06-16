@@ -21,7 +21,7 @@ using namespace std;
 #define CARD_HEIGHT 112.5
 #define CARD_HEIGHT_STACKED 22.5
 #define CARD_ROTATION 0.00
-#define CARD_SCALE 0.25
+#define CARD_SCALE 1.00
 #define CARD_TINT WHITE
 
 class Card {

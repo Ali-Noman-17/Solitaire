@@ -19,6 +19,6 @@ void AlternateCell::draw() {
 bool AlternateCell::stackAllowed(Card* obj) {
 	if (isEmpty()) return 1;
 	if (obj->getColour() == getLatestColour()) return 0;
-	else if (getTopCard()->canStackDsc(obj)) return 1;
-	else return 1;
+	if (getTopCard()->canStackAsc(obj)) return 1;
+	else return 0;
 }

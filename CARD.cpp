@@ -11,7 +11,7 @@ hitBox{ xy.x,xy.y,CARD_WIDTH,CARD_HEIGHT } {
 	face.height = hitBox.height;
 }
 
-Card::~Card() {}
+Card::~Card() { UnloadTexture(face); }
 
 int Card::getValue() { return value; }
 
@@ -21,14 +21,11 @@ Rectangle Card::getHitBox() { return hitBox; }
 
 void Card::flip() {
 	flipped = (flipped + 1) % 2;
-	if (isFlipped()) {
-		UnloadTexture(face);
-		face = LoadTexture(front.data());
-	}
-	else {
-		UnloadTexture(face);
-		face = LoadTexture(BACK_TEXTURE);
-	}
+	UnloadTexture(face);
+	if (isFlipped())  face = LoadTexture(front.data()); 
+	else face = LoadTexture(BACK_TEXTURE);
+	face.width = CARD_WIDTH;
+	face.height = CARD_HEIGHT;
 }
 
 void Card::setFlip(bool flip) { flipped = flip; }
@@ -38,7 +35,6 @@ bool Card::isFlipped() { return flipped; }
 bool Card::canStackAsc(Card* obj) { return (obj->value == value - 1); }
 
 bool Card::canStackDsc(Card* obj) { return (obj->value == value + 1); }
-
 
 void Card::draw() { DrawTextureEx(face, xy, CARD_ROTATION, CARD_SCALE, CARD_TINT); }
 

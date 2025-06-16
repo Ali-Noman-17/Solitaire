@@ -16,10 +16,12 @@ using namespace std;
 
 #define NUMBER_VALS 13
 #define NUMBER_SUITS 4
+#define NUMBER_POOL 24
 #define NUMBER_CARDS 52
 #define ALTERNATE_DIVISION_TEXTURE "./sprites/texture-alt-div.jpg"
 #define SUIT_DIVISION_TEXTURE "./sprites/texture-suit-div.jpg"
 #define POOL_DIVISION_TEXTURE "./sprites/texture-pool-div.jpg"
+#define BACKGROUND_TEXTURE "./sprites/texture-bg.jpg"
 #define POOL 1
 #define SUITS 2
 #define PLAY 3
@@ -30,11 +32,11 @@ using namespace std;
 #define POOL_LOCKED_CELL 0
 #define POOL_AVAILABLE_CELL 1
 #define DIVISION_WIDTH_PLAY 725
-#define DIVISION_WIDTH_POOL 375
+#define DIVISION_WIDTH_POOL 300
 #define DIVISION_WIDTH_SUITS 425
-#define DIVISION_HEIGHT_PLAY 647.5
-#define DIVISION_HEIGHT_POOL 152.5
-#define DIVISION_HEIGHT_SUITS 152.5
+#define DIVISION_HEIGHT_PLAY 645
+#define DIVISION_HEIGHT_POOL 153
+#define DIVISION_HEIGHT_SUITS 153
 #define DIVISION_ROTATION 0.00
 #define DIVISION_SCALE 1.00
 #define DIVISION_TINT WHITE
@@ -58,6 +60,7 @@ public:
 		hitBox = { xy.x, xy.y, width, height };
 		face.width = hitBox.width;
 		face.height = hitBox.height;
+		initialiseCells();
 	}
 
 	~Division() { 
@@ -73,6 +76,28 @@ public:
 	void draw() {
 		DrawTextureEx(face, xy, DIVISION_ROTATION, DIVISION_SCALE, DIVISION_TINT);
 		for (int i = 0; i < num; i++) { arr[i]->draw(); }
+	}
+
+	void initialiseCells() {
+		if (num == ALTERNATE_DIVISION_NUM) {
+			for (int i = 0; i < num; i++) {
+				delete arr[i];
+				arr[i]= new AlternateCell(NUMBER_VALS, CELL_TEXTURE);
+			}
+		}
+		else if (num == SUIT_DIVISION_NUM) {
+			for (int i = 0; i < NUMBER_SUITS; i++) { delete arr[i]; }
+			arr[0] = new SuitCell(NUMBER_VALS, SPADES_CELL_TEXTURE, SUIT_SPADES);
+			arr[1] = new SuitCell(NUMBER_VALS, CLUBS_CELL_TEXTURE, SUIT_CLUBS);
+			arr[2] = new SuitCell(NUMBER_VALS, HEARTS_CELL_TEXTURE, SUIT_HEARTS);
+			arr[3] = new SuitCell(NUMBER_VALS, DIAMONDS_CELL_TEXTURE, SUIT_DIAMONDS);
+		}
+		else if (num == POOL_DIVISION_NUM) {
+			for (int i = 0; i < num; i++) {
+				delete arr[i];
+				arr[i] = new FreeCell(NUMBER_POOL, CELL_TEXTURE);
+			}
+		}
 	}
 	
 	void positionCells() {
@@ -133,8 +158,9 @@ public:
 	}
 
 	void reveal() {
-		int i = arr[POOL_LOCKED_CELL]->getNum();
-		Card* obj = arr[POOL_LOCKED_CELL]->getCard(i);
+		int i = arr[POOL_LOCKED_CELL]->getNum() - 1;
+		Card* obj = arr[POOL_LOCKED_CELL]->getTopCard();
+		obj->flip();
 		moveStack(obj, arr[POOL_LOCKED_CELL], arr[POOL_AVAILABLE_CELL], i);
 	}
 	
@@ -146,14 +172,6 @@ public:
 			arr[POOL_LOCKED_CELL]->add(obj);
 			arr[POOL_AVAILABLE_CELL]->remove(obj);
 		}
-	}
-
-	void defSuitCells() {
-		for (int i = 0; i < NUMBER_SUITS; i++) { delete arr[i]; }
-		arr[0] = new SuitCell(NUMBER_VALS, SPADES_CELL_TEXTURE, SUIT_SPADES);
-		arr[1] = new SuitCell(NUMBER_VALS, CLUBS_CELL_TEXTURE, SUIT_CLUBS);
-		arr[2] = new SuitCell(NUMBER_VALS, HEARTS_CELL_TEXTURE, SUIT_HEARTS);
-		arr[3] = new SuitCell(NUMBER_VALS, DIAMONDS_CELL_TEXTURE, SUIT_DIAMONDS);
 	}
 
 	void save(ofstream& file) {

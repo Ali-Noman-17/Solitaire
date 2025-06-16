@@ -17,7 +17,7 @@ using namespace std;
 #define SPACER_WIDTH 25
 #define VERT_WIDTH 20
 #define CELL_ROTATION 0.00
-#define CELL_SCALE 0.25
+#define CELL_SCALE 1.00
 #define CELL_TINT WHITE
 #define STACK_WIDTH 25
 #define CAP_INCREMENT 5

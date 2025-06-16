@@ -54,6 +54,7 @@ void Cell::drawCascade() {
 			int yShift = xy.y + (i * STACK_WIDTH);
 			arr[i]->move(xy.x, yShift);
 			arr[i]->updateHitBox(CARD_WIDTH, CARD_HEIGHT_STACKED);
+			if (i == num - 1 && !arr[i]->isFlipped()) arr[i]->flip();
 			arr[i]->draw();
 		}
 		arr[num - 1]->updateHitBox(CARD_WIDTH, CARD_HEIGHT);

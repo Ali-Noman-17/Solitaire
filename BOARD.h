@@ -12,9 +12,18 @@ using namespace std;
 #define ERROR_INVALID "Invalid move attempted"
 #define LOG_FILE "logData.txt"
 #define CARD_VALUES "A23456789TJQK"
+#define SAVE_TEXT "Save & Exit"
+#define EXIT_TEXT "Exit"
+#define NEW_TEXT "New Game"
+#define LOAD_TEXT "Load Game"
 #define SCORE_INCREMENT 5
 #define BOARD_LENGTH 1000
 #define BOARD_HEIGHT 800
+#define BUTTON_LENGTH 200
+#define BUTTON_HEIGHT 50
+#define BUTTON_START 762
+#define BUTTON_FONT 28
+
 
 class Board {
 	static Board* instance;
@@ -55,18 +64,29 @@ public:
 
 	void pickCard();
 	void setCard();
+	void logError(string error);
+	void draw();
 	
-	void recordInput(InputRecorder rec);
-	void recordPlayCollision(InputRecorder rec);
-	void recordSuitsCollision(InputRecorder rec);
-	void recordPoolCollision(InputRecorder rec);
+	void recordInput(InputRecorder& rec);
+	void recordPlayCollision(InputRecorder& rec);
+	void recordSuitsCollision(InputRecorder& rec);
+	void recordPoolCollision(InputRecorder& rec);
 	void resetInputs();
 	bool inputSetAllowed();
+	bool isSourceComplete();
 
 	void saveGame();
 	void loadGame();
 	void save(ofstream& file);
 	void load(ifstream& file);
+	bool canLoad();
+
+	void toggleMouse();
+	void mouseIsPressed();
+	void mouseIsReleased();
+	void setMouse(Vector2 mouseCoords);
+	bool mousePress();
+	Vector2 getMouse();
 
 	bool checkWin();
 	void addScore();

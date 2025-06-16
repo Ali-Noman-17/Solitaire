@@ -46,11 +46,10 @@ void Board::initPlay() {
 			play.addToCell(deck[index], i);
 		}
 	}
+	play.flipTops();
 }
 
-void Board::initSuits() { 
-	suits.defSuitCells(); 
-}
+void Board::initSuits() {}
 
 void Board::initPool() {
 	int size = num;
@@ -74,7 +73,7 @@ void Board::position() {
 }
 
 void Board::positionPlay() {
-	float y = (2 * VERT_WIDTH) * CELL_HEIGHT;
+	float y = DIVISION_HEIGHT_POOL;
 	play.move(0, y);
 	play.updateHitBox();
 	play.positionCells();
@@ -98,8 +97,15 @@ void Board::pickCard() {
 	if (!source.isDataComplete) throw ERROR_INVALID;
 	//pool moves
 	if (source.divNum == POOL && source.cellNum == POOL_LOCKED_CELL) {
-		if (!source.cell->isEmpty()) pool.reveal();
-		else if (!pool.getCellRef(POOL_AVAILABLE_CELL)->isEmpty()) pool.cycleBack();
+		if (!source.cell->isEmpty()) {
+			pool.reveal();
+			source.isDataComplete = 0;
+		}
+		else if (!pool.getCellRef(POOL_AVAILABLE_CELL)->isEmpty()) {
+			pool.cycleBack();
+			mouseIsReleased();
+			source.isDataComplete = 0;
+		}
 		else throw ERROR_INVALID;
 	}
 }
@@ -119,6 +125,7 @@ void Board::setCard() {
 	}
 	//play move
 	if (target.divNum == PLAY) {
+		if (source.divNum == SUITS && source.cardNum == -1) throw ERROR_INVALID;
 		if (source.divNum == POOL || source.divNum == SUITS) {
 			if (!source.cell->isTopCard(source.card)) throw ERROR_INVALID;
 			play.moveToCell(source.card, source.cell, target.cell);
@@ -128,13 +135,23 @@ void Board::setCard() {
 
 }
 
-void Board::recordInput(InputRecorder rec) {
-	if (rec.cell == nullptr) recordPoolCollision(rec);
-	if (rec.cell == nullptr) recordSuitsCollision(rec);
-	if (rec.cell == nullptr) recordPlayCollision(rec);
+void Board::logError(string error) {
+	logger.writeError(error);
 }
 
-void Board::recordPlayCollision(InputRecorder rec) {
+void Board::draw() {
+	play.draw();
+	suits.draw();
+	pool.draw();
+}
+
+void Board::recordInput(InputRecorder& rec) {
+	if (rec.divNum == -1) recordPoolCollision(rec);
+	if (rec.divNum == -1) recordSuitsCollision(rec);
+	if (rec.divNum == -1) recordPlayCollision(rec);
+}
+
+void Board::recordPlayCollision(InputRecorder& rec) {
 	for (int i = 0; i < ALTERNATE_DIVISION_NUM; i++) {
 		if (CheckCollisionPointRec(mouse, play.getCellHitBox(i))) {
 			rec.cell = play.getCellRef(i);
@@ -143,7 +160,7 @@ void Board::recordPlayCollision(InputRecorder rec) {
 			break;
 		}
 	}
-	if (rec.cell == nullptr) return;
+	if (rec.cell == nullptr) throw ERROR_INVALID;
 	for (int i = 0; i < rec.cell->getNum(); i++) {
 		if (CheckCollisionPointRec(mouse, rec.cell->getCardHitBox(i))) {
 			rec.card = rec.cell->getCard(i);
@@ -154,7 +171,7 @@ void Board::recordPlayCollision(InputRecorder rec) {
 	}
 }
 
-void Board::recordSuitsCollision(InputRecorder rec){
+void Board::recordSuitsCollision(InputRecorder& rec){
 	for (int i = 0; i < SUIT_DIVISION_NUM; i++) {
 		if (CheckCollisionPointRec(mouse, suits.getCellHitBox(i))) {
 			rec.cell = suits.getCellRef(i);
@@ -167,12 +184,11 @@ void Board::recordSuitsCollision(InputRecorder rec){
 	if (!rec.cell->isEmpty()) {
 		rec.card = rec.cell->getTopCard();
 		rec.cardNum = rec.cell->getNum() - 1;
-		rec.dataCompleted();
 	}
-	
+	rec.dataCompleted();
 }
 
-void Board::recordPoolCollision(InputRecorder rec){
+void Board::recordPoolCollision(InputRecorder& rec){
 	for (int i = 0; i < POOL_DIVISION_NUM; i++) {
 		if (CheckCollisionPointRec(mouse, pool.getCellHitBox(i))) {
 			rec.cell = pool.getCellRef(i);
@@ -202,6 +218,8 @@ bool Board::inputSetAllowed(){
 	if (source.cell == target.cell) return 0;
 	else return 1;
 }
+
+bool Board::isSourceComplete() { return source.isDataComplete; }
 
 void Board::saveGame() {
 	ofstream file(SAVE_FILE);
@@ -239,7 +257,29 @@ void Board::load(ifstream& file) {
 	pool.load(file, deck);
 }
 
+bool Board::canLoad() {
+	ifstream file(SAVE_FILE, std::ios::binary | std::ios::ate);
+	return file.tellg() > 0;
+}
+
 void Board::addScore() { score += SCORE_INCREMENT; }
+
+void Board::toggleMouse() {
+	isMousePressed = (isMousePressed + 1) % 2;
+}
+
+void Board::mouseIsPressed() { isMousePressed = 1; }
+
+void Board::mouseIsReleased() { isMousePressed = 0; }
+
+void Board::setMouse(Vector2 mouseCoords) {
+	mouse.x = mouseCoords.x;
+	mouse.y = mouseCoords.y;
+}
+
+Vector2 Board::getMouse() { return mouse; }
+
+bool Board::mousePress() { return isMousePressed; }
 
 bool Board::checkWin() { 
 	for (int i = 0; i < NUMBER_SUITS; i++) {
@@ -259,13 +299,15 @@ void Board::randomise() {
 }
 
 int Board::getRandom() {
-	int random = randoms[num];
+	int random = randoms[num - 1];
 	num--;
 	return random;
 }
 
 string Board::pathConctructor(const char name, const char suit) {
+	string pre = "./sprites/";
 	string dash = "-";
-	string path = FRONT_TEXTURE_PREFIX + name + dash + FRONT_TEXTURE_SUFFIX;
+	string suf = ".jpg";
+	string path = pre + name + dash + suit + suf;
 	return  path;
 }
