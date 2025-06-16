@@ -103,7 +103,6 @@ void Board::pickCard() {
 		}
 		else if (!pool.getCellRef(POOL_AVAILABLE_CELL)->isEmpty()) {
 			pool.cycleBack();
-			mouseIsReleased();
 			source.isDataComplete = 0;
 		}
 		else throw ERROR_INVALID;
@@ -263,14 +262,6 @@ bool Board::canLoad() {
 }
 
 void Board::addScore() { score += SCORE_INCREMENT; }
-
-void Board::toggleMouse() {
-	isMousePressed = (isMousePressed + 1) % 2;
-}
-
-void Board::mouseIsPressed() { isMousePressed = 1; }
-
-void Board::mouseIsReleased() { isMousePressed = 0; }
 
 void Board::setMouse(Vector2 mouseCoords) {
 	mouse.x = mouseCoords.x;

@@ -81,9 +81,6 @@ public:
 	void load(ifstream& file);
 	bool canLoad();
 
-	void toggleMouse();
-	void mouseIsPressed();
-	void mouseIsReleased();
 	void setMouse(Vector2 mouseCoords);
 	bool mousePress();
 	Vector2 getMouse();
