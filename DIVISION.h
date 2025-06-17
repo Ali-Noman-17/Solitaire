@@ -142,8 +142,10 @@ public:
 	void moveStack(Card* obj, Cell* baseCell, Cell* targetCell, const int index) {
 		int size = baseCell->getNum();
 		for (int i = index; i < size; i++) {
-			targetCell->add(obj);
-			baseCell->remove(obj);
+			targetCell->add(baseCell->getCard(i));
+		}
+		for (int i = index; i < size; i++) {
+			baseCell->remove(baseCell->getCard(i));
 		}
 	}
 
@@ -175,22 +177,10 @@ public:
 	}
 
 	void save(ofstream& file) {
-		file.write((char*)num, sizeof(int));
-		file.write((char*)&xy.x, sizeof(float));
-		file.write((char*)&xy.y, sizeof(float));
-		file.write((char*)&hitBox.width, sizeof(float));
-		file.write((char*)&hitBox.height, sizeof(float));
 		for (int i = 0; i < num; i++) { arr[i]->save(file); }
 	}
 
 	void load(ifstream& file, Card** deck) {
-		file.read((char*)num, sizeof(int));
-		file.read((char*)&xy.x, sizeof(float));
-		file.read((char*)&xy.y, sizeof(float));
-		hitBox.x = xy.x;
-		hitBox.y = xy.y;
-		file.read((char*)&hitBox.width, sizeof(float));
-		file.read((char*)&hitBox.height, sizeof(float));
 		for (int i = 0; i < num; i++) { arr[i]->load(file,deck); }
 	}
 

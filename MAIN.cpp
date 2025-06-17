@@ -18,7 +18,7 @@ int main()
     background.width = BOARD_LENGTH;
     background.height = BOARD_HEIGHT;
 
-    bool flag = 0;
+    bool flag = 0, win = 0;
     Vector2 mouse;
 
     //HOME MENU
@@ -55,6 +55,10 @@ int main()
 
     //GAMELOOP
     while (!WindowShouldClose()) {
+        if (octopus.checkWin()) {
+            win = 1;
+            break;
+        }
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             octopus.setMouse(GetMousePosition());
             if (CheckCollisionPointRec(octopus.getMouse(), saveButton)) {
@@ -79,7 +83,7 @@ int main()
                 }
                 catch (const char* error) {
                     octopus.logError(ERROR_INVALID);
-                    continue;
+                    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) continue;
                 }
             }
             else {

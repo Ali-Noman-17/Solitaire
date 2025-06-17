@@ -159,7 +159,11 @@ void Board::recordPlayCollision(InputRecorder& rec) {
 			break;
 		}
 	}
-	if (rec.cell == nullptr) throw ERROR_INVALID;
+	if (rec.cellNum == -1) return;
+	if (source.isDataComplete && rec.cell->isEmpty()) {
+		rec.dataCompleted();
+		return;
+	}
 	for (int i = 0; i < rec.cell->getNum(); i++) {
 		if (CheckCollisionPointRec(mouse, rec.cell->getCardHitBox(i))) {
 			rec.card = rec.cell->getCard(i);
@@ -179,7 +183,7 @@ void Board::recordSuitsCollision(InputRecorder& rec){
 			break;
 		}
 	}
-	if (rec.cell == nullptr) return;
+	if (rec.cellNum == -1) return;
 	if (!rec.cell->isEmpty()) {
 		rec.card = rec.cell->getTopCard();
 		rec.cardNum = rec.cell->getNum() - 1;

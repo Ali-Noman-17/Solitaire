@@ -10,7 +10,7 @@ hitBox{ xy.x,xy.y,CELL_WIDTH,CELL_HEIGHT } {
 	face.height = hitBox.height;
 }
 
-Cell::~Cell() { delete[] arr; }
+Cell::~Cell() {}
 
 int Cell::getNum() { return num; }
 
