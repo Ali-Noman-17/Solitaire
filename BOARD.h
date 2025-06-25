@@ -19,7 +19,7 @@ using namespace std;
 #define SCORE_INCREMENT 5
 #define BOARD_LENGTH 1000
 #define BOARD_HEIGHT 800
-#define BUTTON_LENGTH 200
+#define BUTTON_WIDTH 200
 #define BUTTON_HEIGHT 50
 #define BUTTON_START 762
 #define BUTTON_FONT 28

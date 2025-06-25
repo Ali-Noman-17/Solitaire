@@ -1,4 +1,5 @@
 #include "BOARD.h"
+#include "BUTTON.h"
 
 
 int main()
@@ -10,10 +11,12 @@ int main()
     //HOME MENU UI STUFF
     float saveButtonY = DIVISION_HEIGHT_SUITS + BUTTON_HEIGHT;
     float exitButtonY = saveButtonY + (2 * BUTTON_HEIGHT);
-    Rectangle saveButton = { BUTTON_START, saveButtonY, BUTTON_LENGTH, BUTTON_HEIGHT };
-    Rectangle exitButton = { BUTTON_START, exitButtonY, BUTTON_LENGTH, BUTTON_HEIGHT };
-    Rectangle loadButton = { 25, 500, BUTTON_LENGTH, BUTTON_HEIGHT };
-    Rectangle newButton = { 25, 400, BUTTON_LENGTH, BUTTON_HEIGHT };
+
+    Button saveButton(BUTTON_START, saveButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, SAVE_TEXT);
+    Button exitButton(BUTTON_START, exitButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, EXIT_TEXT);
+    Button newButton(25, 400, BUTTON_WIDTH, BUTTON_HEIGHT, NEW_TEXT);
+    Button loadButton(25, 500, BUTTON_WIDTH, BUTTON_HEIGHT, LOAD_TEXT);
+
     Texture2D background = LoadTexture(BACKGROUND_TEXTURE);
     background.width = BOARD_LENGTH;
     background.height = BOARD_HEIGHT;
@@ -25,18 +28,16 @@ int main()
     while (true) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             mouse = GetMousePosition();
-            if (CheckCollisionPointRec(mouse, newButton)) break;
-            if (CheckCollisionPointRec(mouse, loadButton)) {
+            if (CheckCollisionPointRec(mouse, newButton.getHitBox())) break;
+            if (CheckCollisionPointRec(mouse, loadButton.getHitBox())) {
                 flag = 1;
                 break;
             }
         }
         BeginDrawing();
         DrawTexture(background, 0, 0, WHITE);
-        DrawRectangleRec(newButton, GRAY);
-        DrawText(NEW_TEXT, (int)newButton.x + 5, (int)newButton.y + 5, BUTTON_FONT, WHITE);
-        DrawRectangleRec(loadButton, GRAY);
-        DrawText(LOAD_TEXT, (int)loadButton.x + 5, (int)loadButton.y + 5, BUTTON_FONT, WHITE);
+        newButton.draw();
+        loadButton.draw();
         EndDrawing();
     }
     UnloadTexture(background);
@@ -61,7 +62,7 @@ int main()
         }
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             octopus.setMouse(GetMousePosition());
-            if (CheckCollisionPointRec(octopus.getMouse(), saveButton)) {
+            if (CheckCollisionPointRec(octopus.getMouse(), saveButton.getHitBox())) {
                 try {
                     octopus.saveGame();
                 }
@@ -70,7 +71,7 @@ int main()
                 }
                 break;
             }
-            if (CheckCollisionPointRec(octopus.getMouse(), exitButton)) {
+            if (CheckCollisionPointRec(octopus.getMouse(), exitButton.getHitBox())) {
                 break;
             }
         }
@@ -101,14 +102,9 @@ int main()
         
         BeginDrawing();
         ClearBackground(GREEN);
-
         octopus.draw();
-
-        DrawRectangleRec(saveButton, GRAY);
-        DrawText(SAVE_TEXT, (int)saveButton.x, (int)saveButton.y, BUTTON_FONT, WHITE);
-        DrawRectangleRec(exitButton, GRAY);
-        DrawText(EXIT_TEXT, (int)exitButton.x, (int)exitButton.y, BUTTON_FONT, WHITE);
-
+        saveButton.draw();
+        exitButton.draw();
         EndDrawing();
     }
 
