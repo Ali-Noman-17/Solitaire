@@ -17,7 +17,7 @@ using namespace std;
 #define NEW_TEXT "New Game"
 #define LOAD_TEXT "Load Game"
 #define SCORE_INCREMENT 5
-#define BOARD_LENGTH 1000
+#define BOARD_WIDTH 1000
 #define BOARD_HEIGHT 800
 #define BUTTON_WIDTH 200
 #define BUTTON_HEIGHT 50
@@ -84,9 +84,11 @@ public:
 	void setMouse(Vector2 mouseCoords);
 	bool mousePress();
 	Vector2 getMouse();
+	int getScore();
 
 	bool checkWin();
 	void addScore();
+	void subScore();
 	void randomise();
 	int getRandom();
 	string pathConctructor(const char name, const char suit);

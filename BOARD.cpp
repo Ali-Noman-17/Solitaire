@@ -119,6 +119,7 @@ void Board::setCard() {
 		if (source.divNum == POOL || source.divNum == PLAY) {
 			if (!source.cell->isTopCard(source.card)) throw ERROR_INVALID;
 			suits.moveToCell(source.card, source.cell, target.cell);
+			addScore();
 		}
 		else if (source.divNum == SUITS) throw ERROR_INVALID;
 	}
@@ -267,12 +268,16 @@ bool Board::canLoad() {
 
 void Board::addScore() { score += SCORE_INCREMENT; }
 
+void Board::subScore(){ score -= SCORE_INCREMENT; }
+
 void Board::setMouse(Vector2 mouseCoords) {
 	mouse.x = mouseCoords.x;
 	mouse.y = mouseCoords.y;
 }
 
 Vector2 Board::getMouse() { return mouse; }
+
+int Board::getScore() { return score; }
 
 bool Board::mousePress() { return isMousePressed; }
 
