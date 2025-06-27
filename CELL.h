@@ -7,21 +7,6 @@
 #include "CARD.h"
 using namespace std;
 
-#define CELL_TEXTURE "./sprites/texture-cell.jpg"
-#define SPADES_CELL_TEXTURE "./sprites/texture-cell-S.jpg"
-#define CLUBS_CELL_TEXTURE "./sprites/texture-cell-C.jpg"
-#define HEARTS_CELL_TEXTURE "./sprites/texture-cell-H.jpg"
-#define DIAMONDS_CELL_TEXTURE "./sprites/texture-cell-D.jpg"
-#define CELL_WIDTH 75
-#define CELL_HEIGHT 112.5
-#define SPACER_WIDTH 25
-#define VERT_WIDTH 20
-#define CELL_ROTATION 0.00
-#define CELL_SCALE 1.00
-#define CELL_TINT WHITE
-#define STACK_WIDTH 25
-#define CAP_INCREMENT 5
-
 class Cell {
 	int cap;
 	int num;

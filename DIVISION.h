@@ -14,34 +14,6 @@
 #include "FREE_CELL.h"
 using namespace std;
 
-#define NUMBER_VALS 13
-#define NUMBER_SUITS 4
-#define NUMBER_POOL 24
-#define NUMBER_CARDS 52
-#define ALTERNATE_DIVISION_TEXTURE "./sprites/texture-alt-div.jpg"
-#define SUIT_DIVISION_TEXTURE "./sprites/texture-suit-div.jpg"
-#define POOL_DIVISION_TEXTURE "./sprites/texture-pool-div.jpg"
-#define BACKGROUND_TEXTURE "./sprites/texture-bg.jpg"
-#define POOL 1
-#define SUITS 2
-#define PLAY 3
-#define ALTERNATE_DIVISION_NUM 7
-#define SUIT_DIVISION_NUM 4
-#define POOL_DIVISION_NUM 2
-#define POOL_SIZE 16
-#define POOL_LOCKED_CELL 0
-#define POOL_AVAILABLE_CELL 1
-#define DIVISION_WIDTH_PLAY 725
-#define DIVISION_WIDTH_POOL 300
-#define DIVISION_WIDTH_SUITS 425
-#define DIVISION_HEIGHT_PLAY 645
-#define DIVISION_HEIGHT_POOL 153
-#define DIVISION_HEIGHT_SUITS 153
-#define DIVISION_ROTATION 0.00
-#define DIVISION_SCALE 1.00
-#define DIVISION_TINT WHITE
-
-
 template <typename T>
 class Division {
 	int num;
@@ -186,23 +158,5 @@ public:
 
 	bool isCellEmpty(const int i) { return arr[i]->isEmpty(); }
 };
-
-template <>
-inline AlternateCell* Division<AlternateCell>::constructCell() {
-	const int cap = 13;
-	return new AlternateCell(cap, CELL_TEXTURE);
-}
-
-template <>
-inline SuitCell* Division<SuitCell>::constructCell() {
-	const int cap = 13;
-	return new SuitCell(cap, CELL_TEXTURE, SUIT_SPADES);
-}
-
-template <>
-inline FreeCell* Division<FreeCell>::constructCell() {
-	const int cap = 24;
-	return new FreeCell(cap, CELL_TEXTURE);
-}
 
 #endif DIVISION_H

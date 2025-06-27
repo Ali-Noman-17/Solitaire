@@ -8,23 +8,6 @@
 #include "LOGGER.h"
 using namespace std;
 
-#define ERROR_FILE "Couldn't open file"
-#define ERROR_INVALID "Invalid move attempted"
-#define LOG_FILE "logData.txt"
-#define CARD_VALUES "A23456789TJQK"
-#define SAVE_TEXT "Save & Exit"
-#define EXIT_TEXT "Exit"
-#define NEW_TEXT "New Game"
-#define LOAD_TEXT "Load Game"
-#define SCORE_INCREMENT 5
-#define BOARD_WIDTH 1000
-#define BOARD_HEIGHT 800
-#define BUTTON_WIDTH 200
-#define BUTTON_HEIGHT 50
-#define BUTTON_START 762
-#define BUTTON_FONT 28
-
-
 class Board {
 	static Board* instance;
 	int* randoms;

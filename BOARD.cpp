@@ -14,7 +14,10 @@ Board::~Board() {
 	delete[] randoms;
 }
 
-void Board::destroy() { delete instance; }
+void Board::destroy() { 
+	delete instance;
+	instance = nullptr;
+}
 
 void Board::initDeck() {
 	int preset = 0;
@@ -283,7 +286,7 @@ bool Board::mousePress() { return isMousePressed; }
 
 bool Board::checkWin() { 
 	for (int i = 0; i < NUMBER_SUITS; i++) {
-		if (suits.getCellNum(i) < NUMBER_CARDS) return 0;
+		if (suits.getCellNum(i) < NUMBER_VALS) return 0;
 	}
 	return 1;
 }
