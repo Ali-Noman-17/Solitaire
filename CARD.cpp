@@ -19,13 +19,17 @@ char Card::getName() { return name; }
 
 Rectangle Card::getHitBox() { return hitBox; }
 
-void Card::flip() {
-	flipped = (flipped + 1) % 2;
+void Card::correctFace() {
 	UnloadTexture(face);
-	if (isFlipped())  face = LoadTexture(front.data()); 
+	if (isFlipped())  face = LoadTexture(front.data());
 	else face = LoadTexture(BACK_TEXTURE);
 	face.width = CARD_WIDTH;
 	face.height = CARD_HEIGHT;
+}
+
+void Card::flip() {
+	flipped = (flipped + 1) % 2;
+	correctFace();
 }
 
 void Card::setFlip(bool flip) { flipped = flip; }

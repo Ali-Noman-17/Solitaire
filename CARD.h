@@ -26,6 +26,7 @@ public:
 	virtual char getColour() = 0;
 	virtual char getSuit() = 0;
 	Rectangle getHitBox();
+	void correctFace();
 	void flip();
 	void setFlip(bool flip);
 	bool isFlipped();

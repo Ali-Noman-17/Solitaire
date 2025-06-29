@@ -141,6 +141,8 @@ void Cell::loadCards(ifstream& file, Card** deck) {
 				arr[i] = deck[j];
 				arr[i]->setFlip(flipped);
 				arr[i]->move(xy.x, xy.y);
+				arr[i]->correctFace();
+				break;
 			} 
 		}
 	}
