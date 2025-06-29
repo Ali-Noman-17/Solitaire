@@ -6,7 +6,7 @@ Board::Board() : randoms(new int[NUMBER_CARDS]), num(NUMBER_CARDS), score(0),
 play(ALTERNATE_DIVISION_NUM, ALTERNATE_DIVISION_TEXTURE, DIVISION_WIDTH_PLAY, DIVISION_HEIGHT_PLAY),
 suits(SUIT_DIVISION_NUM, SUIT_DIVISION_TEXTURE, DIVISION_WIDTH_SUITS, DIVISION_HEIGHT_SUITS), 
 pool(POOL_DIVISION_NUM, POOL_DIVISION_TEXTURE, DIVISION_WIDTH_POOL, DIVISION_HEIGHT_POOL),
-deck(new Card* [NUMBER_CARDS]), mouse{0,0}, source(), target(), logger(LOG_FILE), isMousePressed(0) {}
+deck(new Card* [NUMBER_CARDS]), mouse{ 0,0 }, source(), target(), logger(LOG_FILE), highlight{0,0,0,0} {}
 
 Board::~Board() { 
 	for (int i = 0; i < NUMBER_CARDS; i++) { delete deck[i]; }
@@ -110,10 +110,12 @@ void Board::pickCard() {
 		}
 		else throw ERROR_INVALID;
 	}
+	if (source.isDataComplete) setHighlight();
 }
 
 void Board::setCard() {
 	recordInput(target);
+	resetHighlight();
 	if (!target.isDataComplete) throw ERROR_INVALID;
 	if (!inputSetAllowed()) throw ERROR_INVALID;
 	if (target.divNum == POOL) throw ERROR_INVALID;
@@ -135,7 +137,6 @@ void Board::setCard() {
 		}
 		else if (source.divNum == PLAY) play.moveToCell(source.card, source.cell, target.cell);
 	}
-
 }
 
 void Board::logError(string error) {
@@ -146,6 +147,7 @@ void Board::draw() {
 	play.draw();
 	suits.draw();
 	pool.draw();
+	if (highlight.width != 0) DrawRectangleLinesEx(highlight, 4, SKYBLUE);
 }
 
 void Board::recordInput(InputRecorder& rec) {
@@ -221,6 +223,25 @@ void Board::resetInputs() {
 	target.flushVals();
 }
 
+void Board::setHighlight() {
+	if (source.divNum == PLAY) {
+		highlight = source.card->getHitBox();
+		Rectangle box = source.cell->getTopCardHitBox();
+		float start = highlight.y;
+		float end = box.y + box.height;
+		float height = end - start;
+		highlight.height = height;
+	}
+	else highlight = source.cell->getHitBox();
+}
+
+void Board::resetHighlight() {
+	highlight.x = 0;
+	highlight.y = 0;
+	highlight.width = 0;
+	highlight.height = 0;
+}
+
 bool Board::inputSetAllowed(){
 	if (source.cell == target.cell) return 0;
 	else return 1;
@@ -247,7 +268,6 @@ void Board::save(ofstream& file) {
 	file.write((char*)&score, sizeof(int));
 	file.write((char*)&mouse.x, sizeof(float));
 	file.write((char*)&mouse.y, sizeof(float));
-	file.write((char*)&isMousePressed, sizeof(bool));
 	play.save(file);
 	suits.save(file);
 	pool.save(file);
@@ -258,7 +278,6 @@ void Board::load(ifstream& file) {
 	file.read((char*)&score, sizeof(int));
 	file.read((char*)&mouse.x, sizeof(float));
 	file.read((char*)&mouse.y, sizeof(float));
-	file.read((char*)&isMousePressed, sizeof(bool));
 	play.load(file, deck);
 	suits.load(file, deck);
 	pool.load(file, deck);
@@ -281,8 +300,6 @@ void Board::setMouse(Vector2 mouseCoords) {
 Vector2 Board::getMouse() { return mouse; }
 
 int Board::getScore() { return score; }
-
-bool Board::mousePress() { return isMousePressed; }
 
 bool Board::checkWin() { 
 	for (int i = 0; i < NUMBER_SUITS; i++) {

@@ -21,7 +21,7 @@ class Board {
 	InputRecorder source;
 	InputRecorder target;
 	Logger logger;
-	bool isMousePressed;
+	Rectangle highlight;
 	
 	Board();
 	~Board();
@@ -55,6 +55,8 @@ public:
 	void recordSuitsCollision(InputRecorder& rec);
 	void recordPoolCollision(InputRecorder& rec);
 	void resetInputs();
+	void setHighlight();
+	void resetHighlight();
 	bool inputSetAllowed();
 	bool isSourceComplete();
 
@@ -65,13 +67,12 @@ public:
 	bool canLoad();
 
 	void setMouse(Vector2 mouseCoords);
-	bool mousePress();
 	Vector2 getMouse();
-	int getScore();
 
-	bool checkWin();
+	int getScore();
 	void addScore();
 	void subScore();
+	bool checkWin();
 	void randomise();
 	int getRandom();
 	string pathConctructor(const char name, const char suit);
