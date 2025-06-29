@@ -12,10 +12,14 @@ int main()
         //HOME MENU UI STUFF
         float saveButtonY = DIVISION_HEIGHT_SUITS + BUTTON_HEIGHT;
         float exitButtonY = saveButtonY + (2 * BUTTON_HEIGHT);
+        float pauseButtonY = exitButtonY + (2 * BUTTON_HEIGHT);
+        float resumeButtonY = pauseButtonY + (2 * BUTTON_HEIGHT);
         float time = 0.0f;
 
-        Button saveButton(BUTTON_START, saveButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, SAVE_TEXT);
+        Button saveButton(BUTTON_START, saveButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, SAVE_TEXT); //make pointers
         Button exitButton(BUTTON_START, exitButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, EXIT_TEXT);
+        Button pauseButton(BUTTON_START, pauseButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, PAUSE_TEXT);
+        Button resumeButton(BUTTON_START, resumeButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, RESUME_TEXT);
         Button newButton(25, 400, BUTTON_WIDTH, BUTTON_HEIGHT, NEW_TEXT);
         Button loadButton(25, 500, BUTTON_WIDTH, BUTTON_HEIGHT, LOAD_TEXT);
         Button backButton(25, 500, BUTTON_WIDTH, BUTTON_HEIGHT, BACK_TEXT);
@@ -24,7 +28,7 @@ int main()
         background.width = BOARD_WIDTH;
         background.height = BOARD_HEIGHT;
 
-        bool flag = 0, win = 0, stay = 0;
+        bool load = 0, win = 0, stay = 0, pause = 0;
         int pens = 0;
         Vector2 mouse;
 
@@ -38,7 +42,7 @@ int main()
                 }
                 if (CheckCollisionPointRec(mouse, loadButton.getHitBox())) {
                     stay = 1;
-                    flag = 1;
+                    load = 1;
                     break;
                 }
             }
@@ -57,7 +61,7 @@ int main()
         octopus.randomise();
         octopus.initialise();
         octopus.position();
-        if (flag) octopus.loadGame();
+        if (load) octopus.loadGame();
 
         //GAME LOOP
         while (!WindowShouldClose()) {
@@ -78,12 +82,12 @@ int main()
                     }
                     break;
                 }
-                if (CheckCollisionPointRec(octopus.getMouse(), exitButton.getHitBox())) {
-                    break;
-                }
+                if (CheckCollisionPointRec(octopus.getMouse(), exitButton.getHitBox())) break;
+                if (CheckCollisionPointRec(octopus.getMouse(), pauseButton.getHitBox())) pause = 1;
+                if (CheckCollisionPointRec(octopus.getMouse(), resumeButton.getHitBox())) pause = 0;
             }
             //MOVE MAKING
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !pause) {
                 octopus.setMouse(GetMousePosition());
                 if (!octopus.isSourceComplete()) {
                     octopus.resetInputs();
@@ -108,7 +112,7 @@ int main()
             }
 
             //TIME UPDATES
-            time += GetFrameTime();
+            if (!pause) time += GetFrameTime();
             int minutes = (int)time / 60;
             int seconds = (int)time % 60;
             if (minutes == pens + 1) {
@@ -122,6 +126,8 @@ int main()
             octopus.draw();
             saveButton.draw();
             exitButton.draw();
+            pauseButton.draw();
+            if (pause) resumeButton.draw();
             DrawText(TextFormat("Time : %02d:%02d", minutes, seconds), BUTTON_START, VERT_WIDTH, 25, WHITE);
             DrawText(TextFormat("Score : %d", octopus.getScore()), BUTTON_START, (VERT_WIDTH * 3), 25, WHITE);
             EndDrawing();

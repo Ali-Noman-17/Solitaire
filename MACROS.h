@@ -32,6 +32,8 @@
 #define ERROR_INVALID "Invalid move attempted"
 #define SAVE_TEXT "Save & Exit"
 #define EXIT_TEXT "Exit"
+#define PAUSE_TEXT "Pause"
+#define RESUME_TEXT "Resume"
 #define NEW_TEXT "New Game"
 #define LOAD_TEXT "Load Game"
 #define BACK_TEXT "Back to Menu"
