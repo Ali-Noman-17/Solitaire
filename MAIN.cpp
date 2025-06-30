@@ -6,54 +6,53 @@ int main()
     //SOLITAIRE WINDOW
     InitWindow(BOARD_WIDTH, BOARD_HEIGHT, "Solitaire");
     SetTargetFPS(60);
-
+    
     //PROGRAM LOOP
     while (!WindowShouldClose()) {
-        //HOME MENU UI STUFF
-        float saveButtonY = DIVISION_HEIGHT_SUITS + BUTTON_HEIGHT;
-        float exitButtonY = saveButtonY + (2 * BUTTON_HEIGHT);
-        float pauseButtonY = exitButtonY + (2 * BUTTON_HEIGHT);
-        float resumeButtonY = pauseButtonY + (2 * BUTTON_HEIGHT);
-        float time = 0.0f;
-
-        Button saveButton(BUTTON_START, saveButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, SAVE_TEXT); //make pointers
-        Button exitButton(BUTTON_START, exitButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, EXIT_TEXT);
-        Button pauseButton(BUTTON_START, pauseButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, PAUSE_TEXT);
-        Button resumeButton(BUTTON_START, resumeButtonY, BUTTON_WIDTH, BUTTON_HEIGHT, RESUME_TEXT);
-        Button newButton(25, 400, BUTTON_WIDTH, BUTTON_HEIGHT, NEW_TEXT);
-        Button loadButton(25, 500, BUTTON_WIDTH, BUTTON_HEIGHT, LOAD_TEXT);
-        Button backButton(25, 500, BUTTON_WIDTH, BUTTON_HEIGHT, BACK_TEXT);
-
+        //UI STUFF 
+        Button* saveButton = new Button(BUTTON_START, DIVISION_HEIGHT_SUITS + (1 * BUTTON_HEIGHT), BUTTON_WIDTH, BUTTON_HEIGHT, SAVE_TEXT);
+        Button* exitButton = new Button(BUTTON_START, DIVISION_HEIGHT_SUITS + (3 * BUTTON_HEIGHT), BUTTON_WIDTH, BUTTON_HEIGHT, EXIT_TEXT);
+        Button* pauseButton = new Button(BUTTON_START, DIVISION_HEIGHT_SUITS + (5 * BUTTON_HEIGHT), BUTTON_WIDTH, BUTTON_HEIGHT, PAUSE_TEXT);
+        Button* resumeButton = new Button(BUTTON_START, DIVISION_HEIGHT_SUITS + (7 * BUTTON_HEIGHT), BUTTON_WIDTH, BUTTON_HEIGHT, RESUME_TEXT);
+        Button* newButton = new Button(BUTTON_START_MENU, BUTTON_UPPER, BUTTON_WIDTH, BUTTON_HEIGHT, NEW_TEXT);
+        Button* loadButton = new Button(BUTTON_START_MENU, BUTTON_LOWER, BUTTON_WIDTH, BUTTON_HEIGHT, LOAD_TEXT);
+        Button* backButton = new Button(BUTTON_START_MENU, BUTTON_LOWER, BUTTON_WIDTH, BUTTON_HEIGHT, BACK_TEXT);
         Texture2D background = LoadTexture(BACKGROUND_TEXTURE);
         background.width = BOARD_WIDTH;
         background.height = BOARD_HEIGHT;
 
-        bool load = 0, win = 0, stay = 0, pause = 0;
+        //VARIABLES
+        bool load = 0, win = 0, stay = 0, pause = 0, safe = 0;
+        float time = 0.0f;
         int pens = 0;
         Vector2 mouse;
 
         //HOME MENU LOOP
         while (!WindowShouldClose()) {
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            //NEW/LOAD BUTTON CHECK
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && safe) {
                 mouse = GetMousePosition();
-                if (CheckCollisionPointRec(mouse, newButton.getHitBox())) {
+                if (CheckCollisionPointRec(mouse, newButton->getHitBox())) {
                     stay = 1;
                     break;
                 }
-                if (CheckCollisionPointRec(mouse, loadButton.getHitBox())) {
+                if (CheckCollisionPointRec(mouse, loadButton->getHitBox())) {
                     stay = 1;
                     load = 1;
                     break;
                 }
             }
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) safe = 1;
+
+            //DRAWING
             BeginDrawing();
             DrawTexture(background, 0, 0, WHITE);
-            newButton.draw();
-            loadButton.draw();
+            newButton->draw();
+            loadButton->draw();
             EndDrawing();
         }
-        UnloadTexture(background);
 
+        UnloadTexture(background);
         if (!stay) break;
 
         //INITIALISING MASTER OCTOPUS
@@ -70,10 +69,11 @@ int main()
                 win = 1;
                 break;
             }
+
             //SAVE/EXIT BUTTON CHECK
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
                 octopus.setMouse(GetMousePosition());
-                if (CheckCollisionPointRec(octopus.getMouse(), saveButton.getHitBox())) {
+                if (CheckCollisionPointRec(octopus.getMouse(), saveButton->getHitBox())) {
                     try {
                         octopus.saveGame();
                     }
@@ -82,10 +82,11 @@ int main()
                     }
                     break;
                 }
-                if (CheckCollisionPointRec(octopus.getMouse(), exitButton.getHitBox())) break;
-                if (CheckCollisionPointRec(octopus.getMouse(), pauseButton.getHitBox())) pause = 1;
-                if (CheckCollisionPointRec(octopus.getMouse(), resumeButton.getHitBox())) pause = 0;
+                if (CheckCollisionPointRec(octopus.getMouse(), exitButton->getHitBox())) break;
+                if (CheckCollisionPointRec(octopus.getMouse(), pauseButton->getHitBox())) pause = 1;
+                if (CheckCollisionPointRec(octopus.getMouse(), resumeButton->getHitBox())) pause = 0;
             }
+
             //MOVE MAKING
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !pause) {
                 octopus.setMouse(GetMousePosition());
@@ -124,10 +125,10 @@ int main()
             BeginDrawing();
             ClearBackground(GREEN);
             octopus.draw();
-            saveButton.draw();
-            exitButton.draw();
-            pauseButton.draw();
-            if (pause) resumeButton.draw();
+            saveButton->draw();
+            exitButton->draw();
+            pauseButton->draw();
+            if (pause) resumeButton->draw();
             DrawText(TextFormat("Time : %02d:%02d", minutes, seconds), BUTTON_START, VERT_WIDTH, 25, WHITE);
             DrawText(TextFormat("Score : %d", octopus.getScore()), BUTTON_START, (VERT_WIDTH * 3), 25, WHITE);
             EndDrawing();
@@ -142,17 +143,25 @@ int main()
         while (win) {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 mouse = GetMousePosition();
-                if (CheckCollisionPointRec(mouse, backButton.getHitBox())) break;
+                if (CheckCollisionPointRec(mouse, backButton->getHitBox())) break;
             }
             BeginDrawing();
             DrawTexture(background, 0, 0, WHITE);
             DrawText(TextFormat("Score : %d", octopus.getScore()), 25, 400, 30, WHITE);
-            backButton.draw();
+            backButton->draw();
             EndDrawing();
         }
+
         //CLEAN-UP
         UnloadTexture(background);
         octopus.destroy();
+        delete saveButton;
+        delete exitButton;
+        delete pauseButton;
+        delete resumeButton;
+        delete newButton;
+        delete loadButton;
+        delete backButton;
     }
 
     //CLOSING
